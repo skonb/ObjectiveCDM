@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "ObjectiveCDMDownloadBatch.h"
 #import "ObjectiveCDMDownloadTask.h"
-#import "Reachability.h"
+#import "BEReachability.h"
+
+typedef BEReachability Reachability;
 
 @class ObjectiveCDMDownloadBatch;
 @protocol ObjectiveCDMUIDelegate;

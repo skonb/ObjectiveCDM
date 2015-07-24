@@ -309,28 +309,20 @@ didCompleteWithError:(NSError *)error {
 
 // Checks if we have an internet connection or not
 - (void) listenToInternetConnectionChange {
-    internetReachability = [Reachability reachabilityWithHostname:@"www.google.com"];
-    
-    // Internet is reachable
-    __weak ObjectiveCDM* _weakSelf = self;
-    internetReachability.reachableBlock = ^(Reachability *reach) {
-        // Update the UI on the main thread
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // NSLog(@"Yayyy, we have the interwebs!");
-            [_weakSelf continueInCompletedDownloads];
-        });
-    };
-    
-    // Internet is not reachable
-    internetReachability.unreachableBlock = ^(Reachability *reach) {
-        // Update the UI on the main thread
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // NSLog(@"Someone broke the internet :(");
-            [_weakSelf suspendAllOnGoingDownloads];
-        });
-    };
-    
+    internetReachability = [Reachability reachabilityWithHostName:@"www.google.com"];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:internetReachability];
     [internetReachability startNotifier];
+}
+
+-(void)reachabilityChanged:(NSNotification*)notification{
+    switch (internetReachability.currentReachabilityStatus) {
+        case NotReachable:
+            [self suspendAllOnGoingDownloads];
+            break;
+        default:
+            [self continueInCompletedDownloads];
+            break;
+    }
 }
 
 
