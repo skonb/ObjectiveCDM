@@ -200,8 +200,8 @@ andTotalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWriteInput
 // this is to counter iOS8 issue where the simulator will change the document directory every time we
 // launch new simulator
 - (NSString *) absoluteDestinationPath {
-    NSString *documentDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    return [NSString stringWithFormat:@"%@/%@", documentDirectory, self.destination];
+    NSString *cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    return [NSString stringWithFormat:@"%@/%@", cacheDirectory, self.destination];
 }
 
 
